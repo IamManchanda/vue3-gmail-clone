@@ -1,12 +1,39 @@
 <template>
   <div class="page-index">
     <h1>VMail Inbox</h1>
+    <table class="mail-table">
+      <tbody>
+        <tr
+          v-for="email in unarchivedEmails"
+          :key="email.id"
+          :class="['clickable', email.read ? 'read' : '']"
+          @click="handleEmailAsRead(email)"
+        >
+          <td>
+            <input type="checkbox" />
+          </td>
+          <td>{{ email.from }}</td>
+          <td>
+            <p>
+              <strong>{{ email.subject }}</strong> - {{ email.body }}
+            </p>
+          </td>
+          <td class="date">
+            {{ format(new Date(email.sentAt), "MMM do yyyy") }}
+          </td>
+          <td>
+            <button @click="handleEmailAsArchived(email)">Archive</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
 //#region Imports
-import { reactive, toRefs } from "vue";
+import { computed, reactive, toRefs } from "vue";
+import { format } from "date-fns";
 //#endregion
 
 export default {
@@ -58,6 +85,12 @@ export default {
           read: false,
         },
       ],
+      sortedEmails: computed(() =>
+        state.emails.sort((e1, e2) => (e1.sentAt < e2.sentAt ? 1 : -1)),
+      ),
+      unarchivedEmails: computed(() =>
+        state.sortedEmails.filter(e => !e.archived),
+      ),
     });
     //#endregion
 
@@ -68,10 +101,20 @@ export default {
     //#endregion
 
     //#region Methods
+    function handleEmailAsRead(email) {
+      email.read = true;
+    }
+
+    function handleEmailAsArchived(email) {
+      email.archived = true;
+    }
     //#endregion
 
     return {
       ...toRefs(state),
+      format,
+      handleEmailAsRead,
+      handleEmailAsArchived,
     };
   },
 };
