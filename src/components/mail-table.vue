@@ -26,7 +26,9 @@
         </tr>
       </tbody>
     </table>
-    <mail-view v-if="openedEmail" :email="openedEmail" />
+    <modal-view v-if="openedEmail" @close-modal="handleModalAsClose">
+      <mail-view :email="openedEmail" />
+    </modal-view>
   </div>
 </template>
 
@@ -36,12 +38,14 @@ import { computed, reactive, toRefs } from "vue";
 import { format } from "date-fns";
 import axios from "axios";
 import MailView from "@/components/mail-view";
+import ModalView from "@/components/modal-view";
 //#endregion
 
 export default {
   name: "component-mail-table",
   components: {
     MailView,
+    ModalView,
   },
   async setup() {
     //#region Async Data
@@ -87,6 +91,10 @@ export default {
       email.archived = true;
       updateEmail(email);
     }
+
+    function handleModalAsClose() {
+      state.openedEmail = null;
+    }
     //#endregion
 
     return {
@@ -94,6 +102,7 @@ export default {
       format,
       handleEmailAsOpen,
       handleEmailAsArchived,
+      handleModalAsClose,
     };
   },
 };
