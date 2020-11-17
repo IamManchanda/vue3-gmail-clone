@@ -11,7 +11,7 @@
 
 <script>
 //#region Imports
-import { reactive, toRefs } from "vue";
+import { onBeforeMount, onBeforeUnmount, reactive, toRefs } from "vue";
 //#endregion
 
 export default {
@@ -31,11 +31,24 @@ export default {
     //#endregion
 
     //#region Lifecycle hooks
+    onBeforeMount(() => {
+      window.addEventListener("keydown", handleKeydown);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("keydown", handleKeydown);
+    });
     //#endregion
 
     //#region Methods
     function handleOverlay() {
       emit("close-modal");
+    }
+
+    function handleKeydown(event) {
+      if (event.key === "Escape") {
+        emit("close-modal");
+      }
     }
     //#endregion
 
