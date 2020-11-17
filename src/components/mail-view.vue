@@ -1,6 +1,16 @@
 <template>
   <div class="component-mail-view">
     <div class="email-display">
+      <div>
+        <button @click="handleEmailArchiveToggle">
+          {{ email.archived ? "Move to Inbox (e)" : "Archive (e)" }}
+        </button>
+        <button @click="handleEmailReadToggle">
+          {{ email.read ? "Mark Unread (r)" : "Mark Read (r)" }}
+        </button>
+        <button @click="goNewer">Newer (k)</button>
+        <button @click="goOlder">Older (j)</button>
+      </div>
       <h2 class="mb-0">Subject:</h2>
       <div>
         <em>
@@ -18,6 +28,7 @@
 import { reactive, toRefs } from "vue";
 import { format } from "date-fns";
 import marked from "marked";
+import useKeydown from "../composables/use-keydown";
 //#endregion
 
 export default {
@@ -28,7 +39,20 @@ export default {
       required: true,
     },
   },
-  setup() {
+  setup(props, { emit }) {
+    //#region useComposables
+    useKeydown([
+      {
+        key: "r",
+        fn: () => emit("toggle-email-read"),
+      },
+      {
+        key: "e",
+        fn: () => emit("toggle-email-archive"),
+      },
+    ]);
+    //#endregion
+
     //#region Reactive References
     const state = reactive({});
     //#endregion
@@ -40,11 +64,27 @@ export default {
     //#endregion
 
     //#region Methods
+    function handleEmailReadToggle() {
+      emit("toggle-email-read");
+    }
+
+    function handleEmailArchiveToggle() {
+      emit("toggle-email-archive");
+    }
+
+    function goNewer() {}
+
+    function goOlder() {}
     //#endregion
+
     return {
       ...toRefs(state),
       format,
       marked,
+      handleEmailReadToggle,
+      handleEmailArchiveToggle,
+      goNewer,
+      goOlder,
     };
   },
 };

@@ -27,7 +27,11 @@
       </tbody>
     </table>
     <modal-view v-if="openedEmail" @close-modal="handleModalAsClose">
-      <mail-view :email="openedEmail" />
+      <mail-view
+        :email="openedEmail"
+        @toggle-email-read="handleEmailReadToggle"
+        @toggle-email-archive="handleEmailArchiveToggle"
+      />
     </modal-view>
   </div>
 </template>
@@ -95,6 +99,16 @@ export default {
     function handleModalAsClose() {
       state.openedEmail = null;
     }
+
+    function handleEmailReadToggle() {
+      state.openedEmail.read = !state.openedEmail.read;
+      updateEmail(state.openedEmail);
+    }
+
+    function handleEmailArchiveToggle() {
+      state.openedEmail.archived = !state.openedEmail.archived;
+      updateEmail(state.openedEmail);
+    }
     //#endregion
 
     return {
@@ -103,6 +117,8 @@ export default {
       handleEmailAsOpen,
       handleEmailAsArchived,
       handleModalAsClose,
+      handleEmailReadToggle,
+      handleEmailArchiveToggle,
     };
   },
 };

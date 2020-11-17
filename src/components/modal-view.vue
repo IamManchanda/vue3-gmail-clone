@@ -17,13 +17,7 @@ import useKeydown from "../composables/use-keydown";
 
 export default {
   name: "component-modal-view",
-  props: {
-    email: {
-      type: Object,
-      required: true,
-    },
-  },
-  setup(_props, { emit }) {
+  setup(props, { emit }) {
     //#region useComposables
     useKeydown([
       {
