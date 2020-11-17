@@ -6,7 +6,7 @@
           v-for="email in unarchivedEmails"
           :key="email.id"
           :class="['clickable', email.read ? 'read' : '']"
-          @click="handleEmailAsRead(email)"
+          @click="handleEmailAsOpen(email)"
         >
           <td>
             <input type="checkbox" />
@@ -26,6 +26,7 @@
         </tr>
       </tbody>
     </table>
+    <mail-view v-if="openedEmail" :email="openedEmail" />
   </div>
 </template>
 
@@ -34,10 +35,14 @@
 import { computed, reactive, toRefs } from "vue";
 import { format } from "date-fns";
 import axios from "axios";
+import MailView from "@/components/mail-view";
 //#endregion
 
 export default {
   name: "component-mail-table",
+  components: {
+    MailView,
+  },
   async setup() {
     //#region Async Data
     const { data: emails } = await axios.get(
@@ -48,6 +53,7 @@ export default {
     //#region Reactive References
     const state = reactive({
       emails,
+      openedEmail: null,
       sortedEmails: computed(() =>
         state.emails.sort((e1, e2) => (e1.sentAt < e2.sentAt ? 1 : -1)),
       ),
@@ -71,9 +77,10 @@ export default {
       );
     }
 
-    function handleEmailAsRead(email) {
+    function handleEmailAsOpen(email) {
       email.read = true;
       updateEmail(email);
+      state.openedEmail = email;
     }
 
     function handleEmailAsArchived(email) {
@@ -85,7 +92,7 @@ export default {
     return {
       ...toRefs(state),
       format,
-      handleEmailAsRead,
+      handleEmailAsOpen,
       handleEmailAsArchived,
     };
   },
