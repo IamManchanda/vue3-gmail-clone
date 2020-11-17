@@ -11,7 +11,8 @@
 
 <script>
 //#region Imports
-import { onBeforeMount, onBeforeUnmount, reactive, toRefs } from "vue";
+import { reactive, toRefs } from "vue";
+import useKeydown from "../composables/use-keydown";
 //#endregion
 
 export default {
@@ -23,6 +24,15 @@ export default {
     },
   },
   setup(_props, { emit }) {
+    //#region useComposables
+    useKeydown([
+      {
+        key: "Escape",
+        fn: () => emit("close-modal"),
+      },
+    ]);
+    //#endregion
+
     //#region Reactive References
     const state = reactive({});
     //#endregion
@@ -31,24 +41,11 @@ export default {
     //#endregion
 
     //#region Lifecycle hooks
-    onBeforeMount(() => {
-      window.addEventListener("keydown", handleKeydown);
-    });
-
-    onBeforeUnmount(() => {
-      window.removeEventListener("keydown", handleKeydown);
-    });
     //#endregion
 
     //#region Methods
     function handleOverlay() {
       emit("close-modal");
-    }
-
-    function handleKeydown(event) {
-      if (event.key === "Escape") {
-        emit("close-modal");
-      }
     }
     //#endregion
 
