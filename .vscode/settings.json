@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "dist": true,
+    "**/.env.local": true,
+    "**/.env.*.local": true,
+    "**/npm-debug.log*": true,
+    "**/yarn-debug.log*": true,
+    "**/yarn-error.log*": true,
+    "**/pnpm-debug.log*": true
+  }
+}
