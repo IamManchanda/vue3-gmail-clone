@@ -23,12 +23,24 @@ const useEmailSelection = () => {
       emails.add(email);
     }
   }
+
+  function clear() {
+    emails.clear();
+  }
+
+  function addMultiple(newEmails) {
+    newEmails.forEach(email => {
+      emails.add(email);
+    });
+  }
   //#endregion
 
   return {
     ...toRefs(state),
     emails,
     toggle,
+    clear,
+    addMultiple,
   };
 };
 

@@ -1,6 +1,6 @@
 <template>
   <div class="component-mail-table">
-    <h1>{{ emailSelection.emails.size }} emails selected</h1>
+    <bulk-action-bar :emails="unarchivedEmails" />
     <table class="mail-table">
       <tbody>
         <tr
@@ -12,7 +12,7 @@
             <input
               type="checkbox"
               @click="emailSelection.toggle(email)"
-              :selected="emailSelection.emails.has(email)"
+              :checked="emailSelection.emails.has(email)"
             />
           </td>
           <td @click="handleEmailAsOpen(email)">{{ email.from }}</td>
@@ -43,6 +43,7 @@ import { format } from "date-fns";
 import axios from "axios";
 import MailView from "@/components/mail-view";
 import ModalView from "@/components/modal-view";
+import BulkActionBar from "@/components/bulk-action-bar";
 import useEmailSelection from "../composables/use-email-selection";
 //#endregion
 
@@ -51,6 +52,7 @@ export default {
   components: {
     MailView,
     ModalView,
+    BulkActionBar,
   },
   async setup() {
     //#region Async Data
@@ -64,8 +66,6 @@ export default {
     //#endregion
 
     //#region Reactive References
-    /* const selected = reactive(new Set()); */
-
     const state = reactive({
       emails,
       emailSelection,
