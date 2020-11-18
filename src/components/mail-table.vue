@@ -1,10 +1,22 @@
 <template>
   <div class="component-mail-table">
-    <bulk-action-bar :emails="unarchivedEmails" />
+    <button
+      @click="handleSelectedScreen('inbox')"
+      :disabled="selectedScreen === 'inbox'"
+    >
+      Inbox
+    </button>
+    <button
+      @click="handleSelectedScreen('archive')"
+      :disabled="selectedScreen === 'archive'"
+    >
+      Archived
+    </button>
+    <bulk-action-bar :emails="filteredEmails" />
     <table class="mail-table">
       <tbody>
         <tr
-          v-for="email in unarchivedEmails"
+          v-for="email in filteredEmails"
           :key="email.id"
           :class="['clickable', email.read ? 'read' : '']"
         >
@@ -69,11 +81,14 @@ export default {
     const state = reactive({
       emails,
       openedEmail: null,
+      selectedScreen: "inbox",
       sortedEmails: computed(() =>
         state.emails.sort((e1, e2) => (e1.sentAt < e2.sentAt ? 1 : -1)),
       ),
-      unarchivedEmails: computed(() =>
-        state.sortedEmails.filter(e => !e.archived),
+      filteredEmails: computed(() =>
+        state.selectedScreen === "inbox"
+          ? state.sortedEmails.filter(e => !e.archived)
+          : state.sortedEmails.filter(e => e.archived),
       ),
     });
 
@@ -135,10 +150,15 @@ export default {
       }
 
       if (changeIndex) {
-        const currentIndex = state.unarchivedEmails.indexOf(state.openedEmail);
-        const newEmail = state.unarchivedEmails[currentIndex + changeIndex];
+        const currentIndex = state.filteredEmails.indexOf(state.openedEmail);
+        const newEmail = state.filteredEmails[currentIndex + changeIndex];
         handleEmailAsOpen(newEmail);
       }
+    }
+
+    function handleSelectedScreen(selectedScreen) {
+      state.selectedScreen = selectedScreen;
+      emailSelection.clear();
     }
     //#endregion
 
@@ -150,6 +170,7 @@ export default {
       handleEmailAsArchived,
       handleCloseModal,
       handleChangeEmail,
+      handleSelectedScreen,
     };
   },
 };
