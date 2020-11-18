@@ -1,7 +1,6 @@
 <template>
   <div class="page-index">
     <h1>VMail Inbox</h1>
-    <h1>{{ emailSelection.emails.size }} emails selected</h1>
 
     <suspense>
       <template #default>
@@ -18,7 +17,6 @@
 //#region Imports
 import { reactive, toRefs } from "vue";
 import MailTable from "@/components/mail-table";
-import useEmailSelection from "../composables/use-email-selection";
 //#endregion
 
 export default {
@@ -27,14 +25,8 @@ export default {
     MailTable,
   },
   setup() {
-    //#region useComposables
-    const emailSelection = useEmailSelection();
-    //#endregion
-
     //#region Reactive References
-    const state = reactive({
-      emailSelection,
-    });
+    const state = reactive({});
     //#endregion
 
     //#region Watchers

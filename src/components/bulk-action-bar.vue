@@ -1,11 +1,15 @@
 <template>
   <div class="component-bulk-action-bar">
-    <input
-      type="checkbox"
-      :checked="allEmailsSelected"
-      :class="[someEmailsSelected ? 'partial-check' : '']"
-      @click="handleBulkSelection"
-    />
+    <div class="bulk-action-bar">
+      <span class="checkbox">
+        <input
+          type="checkbox"
+          :checked="allEmailsSelected"
+          :class="[someEmailsSelected ? 'partial-check' : '']"
+          @click="handleBulkSelection"
+        />
+      </span>
+    </div>
   </div>
 </template>
 
