@@ -43,6 +43,7 @@ import { format } from "date-fns";
 import axios from "axios";
 import MailView from "@/components/mail-view";
 import ModalView from "@/components/modal-view";
+import useEmailSelection from "../composables/use-email-selection";
 //#endregion
 
 export default {
@@ -58,11 +59,16 @@ export default {
     );
     //#endregion
 
+    //#region useComposables
+    const emailSelection = useEmailSelection();
+    //#endregion
+
     //#region Reactive References
-    const selected = reactive(new Set());
+    /* const selected = reactive(new Set()); */
 
     const state = reactive({
       emails,
+      emailSelection,
       openedEmail: null,
       sortedEmails: computed(() =>
         state.emails.sort((e1, e2) => (e1.sentAt < e2.sentAt ? 1 : -1)),
@@ -70,16 +76,6 @@ export default {
       unarchivedEmails: computed(() =>
         state.sortedEmails.filter(e => !e.archived),
       ),
-      emailSelection: {
-        emails: selected,
-        toggle(email) {
-          if (selected.has(email)) {
-            selected.delete(email);
-          } else {
-            selected.add(email);
-          }
-        },
-      },
     });
 
     //#endregion
