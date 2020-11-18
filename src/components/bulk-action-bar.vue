@@ -10,7 +10,24 @@
         />
       </span>
       <span class="buttons">
-        <button>Mark Read</button>
+        <button
+          @click="emailSelection.markRead()"
+          :disabled="[...emailSelection.emails].every(e => e.read)"
+        >
+          Mark Read
+        </button>
+        <button
+          @click="emailSelection.markUnread()"
+          :disabled="[...emailSelection.emails].every(e => !e.read)"
+        >
+          Mark Unread
+        </button>
+        <button
+          @click="emailSelection.archive()"
+          :disabled="numberOfSelectedEmails === 0"
+        >
+          Archive
+        </button>
       </span>
     </div>
   </div>
