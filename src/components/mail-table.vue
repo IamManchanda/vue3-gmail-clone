@@ -36,7 +36,7 @@
           <td class="date" @click="handleEmailAsOpen(email)">
             {{ format(new Date(email.sentAt), "MMM do yyyy") }}
           </td>
-          <td>
+          <td :class="selectedScreen !== 'inbox' ? 'move-to-inbox' : ''">
             <button
               v-if="selectedScreen === 'inbox'"
               @click="handleEmailAsArchived(email)"
