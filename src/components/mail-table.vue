@@ -1,23 +1,27 @@
 <template>
   <div class="component-mail-table">
+    <h1>{{ emailSelection.emails.size }} emails selected</h1>
     <table class="mail-table">
       <tbody>
         <tr
           v-for="email in unarchivedEmails"
           :key="email.id"
           :class="['clickable', email.read ? 'read' : '']"
-          @click="handleEmailAsOpen(email)"
         >
           <td>
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              @click="emailSelection.toggle(email)"
+              :selected="emailSelection.emails.has(email)"
+            />
           </td>
-          <td>{{ email.from }}</td>
-          <td>
+          <td @click="handleEmailAsOpen(email)">{{ email.from }}</td>
+          <td @click="handleEmailAsOpen(email)">
             <p>
               <strong>{{ email.subject }}</strong> - {{ email.body }}
             </p>
           </td>
-          <td class="date">
+          <td class="date" @click="handleEmailAsOpen(email)">
             {{ format(new Date(email.sentAt), "MMM do yyyy") }}
           </td>
           <td>
@@ -55,6 +59,8 @@ export default {
     //#endregion
 
     //#region Reactive References
+    const selected = reactive(new Set());
+
     const state = reactive({
       emails,
       openedEmail: null,
@@ -64,7 +70,18 @@ export default {
       unarchivedEmails: computed(() =>
         state.sortedEmails.filter(e => !e.archived),
       ),
+      emailSelection: {
+        emails: selected,
+        toggle(email) {
+          if (selected.has(email)) {
+            selected.delete(email);
+          } else {
+            selected.add(email);
+          }
+        },
+      },
     });
+
     //#endregion
 
     //#region Watchers
