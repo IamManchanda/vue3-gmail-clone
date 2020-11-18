@@ -9,6 +9,9 @@
           @click="handleBulkSelection"
         />
       </span>
+      <span class="buttons">
+        <button>Mark Read</button>
+      </span>
     </div>
   </div>
 </template>
@@ -34,8 +37,7 @@ export default {
 
     //#region Reactive References
     const state = reactive({
-      emailSelection,
-      numberOfSelectedEmails: computed(() => state.emailSelection.emails.size),
+      numberOfSelectedEmails: computed(() => emailSelection.emails.size),
       allEmailsSelected: computed(
         () => state.numberOfSelectedEmails === props.emails.length,
       ),
@@ -56,15 +58,16 @@ export default {
     //#region Methods
     function handleBulkSelection() {
       if (state.allEmailsSelected) {
-        state.emailSelection.clear();
+        emailSelection.clear();
       } else {
-        state.emailSelection.addMultiple(props.emails);
+        emailSelection.addMultiple(props.emails);
       }
     }
     //#endregion
 
     return {
       ...toRefs(state),
+      emailSelection,
       handleBulkSelection,
     };
   },

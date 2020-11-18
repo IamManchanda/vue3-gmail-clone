@@ -68,7 +68,6 @@ export default {
     //#region Reactive References
     const state = reactive({
       emails,
-      emailSelection,
       openedEmail: null,
       sortedEmails: computed(() =>
         state.emails.sort((e1, e2) => (e1.sentAt < e2.sentAt ? 1 : -1)),
@@ -146,6 +145,7 @@ export default {
     return {
       ...toRefs(state),
       format,
+      emailSelection,
       handleEmailAsOpen,
       handleEmailAsArchived,
       handleCloseModal,
