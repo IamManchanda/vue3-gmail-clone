@@ -121,5 +121,8 @@ export default {
 
 <style lang="scss" scoped>
 .component-mail-view {
+  .email-display {
+    text-align: left;
+  }
 }
 </style>

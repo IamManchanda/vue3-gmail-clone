@@ -192,5 +192,44 @@ export default {
 
 <style lang="scss" scoped>
 .component-mail-table {
+  .mail-table {
+    max-width: 1000px;
+    margin: auto;
+    border-collapse: collapse;
+
+    tr {
+      height: 40px;
+
+      &:first-of-type {
+        td {
+          border-top: 1px solid black;
+        }
+      }
+
+      &.read {
+        background-color: #eee;
+      }
+    }
+
+    td {
+      border-bottom: 1px solid black;
+      padding: 5px;
+      text-align: left;
+
+      &.date {
+        width: 120px;
+      }
+
+      &.move-to-inbox {
+        width: 140px;
+      }
+
+      p {
+        max-height: 1.2em;
+        overflow-y: hidden;
+        margin: 0;
+      }
+    }
+  }
 }
 </style>

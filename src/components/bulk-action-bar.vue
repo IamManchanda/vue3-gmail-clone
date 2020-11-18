@@ -105,5 +105,21 @@ export default {
 
 <style lang="scss" scoped>
 .component-bulk-action-bar {
+  .bulk-action-bar {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    text-align: left;
+    padding-bottom: 8px;
+
+    input {
+      margin: 5px;
+    }
+
+    .checkbox {
+      margin-right: 6px;
+      margin-left: 3px;
+    }
+  }
 }
 </style>
