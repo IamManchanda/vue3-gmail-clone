@@ -12,7 +12,7 @@
     >
       Archived
     </button>
-    <bulk-action-bar :emails="filteredEmails" />
+    <bulk-action-bar :emails="filteredEmails" :screen="selectedScreen" />
     <table class="mail-table">
       <tbody>
         <tr
@@ -37,7 +37,15 @@
             {{ format(new Date(email.sentAt), "MMM do yyyy") }}
           </td>
           <td>
-            <button @click="handleEmailAsArchived(email)">Archive</button>
+            <button
+              v-if="selectedScreen === 'inbox'"
+              @click="handleEmailAsArchived(email)"
+            >
+              Archive
+            </button>
+            <button v-else @click="handleEmailAsUnarchived(email)">
+              Move to Inbox
+            </button>
           </td>
         </tr>
       </tbody>
@@ -122,6 +130,11 @@ export default {
       updateEmail(email);
     }
 
+    function handleEmailAsUnarchived(email) {
+      email.archived = false;
+      updateEmail(email);
+    }
+
     function handleCloseModal() {
       state.openedEmail = null;
     }
@@ -168,6 +181,7 @@ export default {
       emailSelection,
       handleEmailAsOpen,
       handleEmailAsArchived,
+      handleEmailAsUnarchived,
       handleCloseModal,
       handleChangeEmail,
       handleSelectedScreen,

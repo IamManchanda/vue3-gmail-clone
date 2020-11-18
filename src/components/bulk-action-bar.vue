@@ -23,10 +23,18 @@
           Mark Unread
         </button>
         <button
-          @click="emailSelection.archive()"
+          v-if="screen === 'inbox'"
+          @click="emailSelection.markArchive()"
           :disabled="numberOfSelectedEmails === 0"
         >
           Archive
+        </button>
+        <button
+          v-else
+          @click="emailSelection.markUnarchive()"
+          :disabled="numberOfSelectedEmails === 0"
+        >
+          Move to Inbox
         </button>
       </span>
     </div>
@@ -45,6 +53,10 @@ export default {
     emails: {
       type: Array,
       required: true,
+    },
+    screen: {
+      type: String,
+      default: "",
     },
   },
   setup(props) {

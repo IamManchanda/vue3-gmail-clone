@@ -61,9 +61,16 @@ const useEmailSelection = () => {
     });
   }
 
-  function archive() {
+  function markArchive() {
     markSelected(email => {
       email.archived = true;
+    });
+    clear();
+  }
+
+  function markUnarchive() {
+    markSelected(email => {
+      email.archived = false;
     });
     clear();
   }
@@ -77,7 +84,8 @@ const useEmailSelection = () => {
     addMultiple,
     markRead,
     markUnread,
-    archive,
+    markArchive,
+    markUnarchive,
   };
 };
 
