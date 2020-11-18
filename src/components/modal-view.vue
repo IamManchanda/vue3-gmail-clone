@@ -1,7 +1,7 @@
 <template>
   <div class="component-modal-view">
     <div class="modal">
-      <div class="overlay" @click="handleOverlay"></div>
+      <div class="overlay" @click="handleCloseModal"></div>
       <div class="modal-card">
         <slot />
       </div>
@@ -19,12 +19,7 @@ export default {
   name: "component-modal-view",
   setup(props, { emit }) {
     //#region useComposables
-    useKeydown([
-      {
-        key: "Escape",
-        fn: () => emit("close-modal"),
-      },
-    ]);
+    useKeydown([{ key: "Escape", fn: handleCloseModal }]);
     //#endregion
 
     //#region Reactive References
@@ -38,14 +33,14 @@ export default {
     //#endregion
 
     //#region Methods
-    function handleOverlay() {
+    function handleCloseModal() {
       emit("close-modal");
     }
     //#endregion
 
     return {
       ...toRefs(state),
-      handleOverlay,
+      handleCloseModal,
     };
   },
 };

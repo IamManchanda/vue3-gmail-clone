@@ -26,12 +26,8 @@
         </tr>
       </tbody>
     </table>
-    <modal-view v-if="openedEmail" @close-modal="handleModalAsClose">
-      <mail-view
-        :email="openedEmail"
-        @toggle-email-read="handleEmailReadToggle"
-        @toggle-email-archive="handleEmailArchiveToggle"
-      />
+    <modal-view v-if="openedEmail" @close-modal="handleCloseModal">
+      <mail-view :email="openedEmail" @change-email="handleChangeEmail" />
     </modal-view>
   </div>
 </template>
@@ -86,9 +82,12 @@ export default {
     }
 
     function handleEmailAsOpen(email) {
-      email.read = true;
-      updateEmail(email);
       state.openedEmail = email;
+
+      if (email) {
+        email.read = true;
+        updateEmail(email);
+      }
     }
 
     function handleEmailAsArchived(email) {
@@ -96,18 +95,38 @@ export default {
       updateEmail(email);
     }
 
-    function handleModalAsClose() {
+    function handleCloseModal() {
       state.openedEmail = null;
     }
 
-    function handleEmailReadToggle() {
-      state.openedEmail.read = !state.openedEmail.read;
-      updateEmail(state.openedEmail);
-    }
+    function handleChangeEmail({
+      toggleRead,
+      toggleArchive,
+      save,
+      closeModal,
+      changeIndex,
+    }) {
+      if (toggleRead) {
+        state.openedEmail.read = !state.openedEmail.read;
+      }
 
-    function handleEmailArchiveToggle() {
-      state.openedEmail.archived = !state.openedEmail.archived;
-      updateEmail(state.openedEmail);
+      if (toggleArchive) {
+        state.openedEmail.archived = !state.openedEmail.archived;
+      }
+
+      if (save) {
+        updateEmail(state.openedEmail);
+      }
+
+      if (closeModal) {
+        state.openedEmail = null;
+      }
+
+      if (changeIndex) {
+        const currentIndex = state.unarchivedEmails.indexOf(state.openedEmail);
+        const newEmail = state.unarchivedEmails[currentIndex + changeIndex];
+        handleEmailAsOpen(newEmail);
+      }
     }
     //#endregion
 
@@ -116,9 +135,8 @@ export default {
       format,
       handleEmailAsOpen,
       handleEmailAsArchived,
-      handleModalAsClose,
-      handleEmailReadToggle,
-      handleEmailArchiveToggle,
+      handleCloseModal,
+      handleChangeEmail,
     };
   },
 };

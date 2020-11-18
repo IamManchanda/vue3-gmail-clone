@@ -42,14 +42,12 @@ export default {
   setup(props, { emit }) {
     //#region useComposables
     useKeydown([
-      {
-        key: "r",
-        fn: () => emit("toggle-email-read"),
-      },
-      {
-        key: "e",
-        fn: () => emit("toggle-email-archive"),
-      },
+      { key: "r", fn: handleEmailReadToggle },
+      { key: "e", fn: handleEmailArchiveToggle },
+      { key: "k", fn: goNewer },
+      { key: "j", fn: goOlder },
+      { key: "[", fn: goNewerAndArchive },
+      { key: "]", fn: goOlderAndArchive },
     ]);
     //#endregion
 
@@ -65,16 +63,47 @@ export default {
 
     //#region Methods
     function handleEmailReadToggle() {
-      emit("toggle-email-read");
+      emit("change-email", {
+        toggleRead: true,
+        save: true,
+      });
     }
 
     function handleEmailArchiveToggle() {
-      emit("toggle-email-archive");
+      emit("change-email", {
+        toggleArchive: true,
+        save: true,
+        closeModal: true,
+      });
     }
 
-    function goNewer() {}
+    function goNewer() {
+      emit("change-email", {
+        changeIndex: -1,
+      });
+    }
 
-    function goOlder() {}
+    function goOlder() {
+      emit("change-email", {
+        changeIndex: 1,
+      });
+    }
+
+    function goNewerAndArchive() {
+      emit("change-email", {
+        changeIndex: -1,
+        toggleArchive: true,
+        save: true,
+      });
+    }
+
+    function goOlderAndArchive() {
+      emit("change-email", {
+        changeIndex: 1,
+        toggleArchive: true,
+        save: true,
+      });
+    }
     //#endregion
 
     return {
